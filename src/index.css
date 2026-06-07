@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", var(--font-sans);
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@media print {
+  /* Class to selectively hide elements from printouts */
+  .no-print,
+  .no-print *,
+  button,
+  nav,
+  header,
+  footer,
+  aside {
+    display: none !important;
+  }
+
+  /* Force background colors/images to print correctly */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Setup paper margins and sizes */
+  @page {
+    size: A4 portrait;
+    margin: 15mm 12mm 15mm 12mm;
+  }
+
+  /* Core container reset */
+  body, html, #root {
+    background: #ffffff !important;
+    color: #0d0d0d !important;
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Adjust grid columns to wrap elegantly in printed documents */
+  .grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+  }
+
+  /* Standard card style conversions for black & white paper readability */
+  .bg-neutral-900,
+  .bg-neutral-950,
+  .bg-neutral-905,
+  .bg-black {
+    background-color: #ffffff !important;
+    color: #0d0d0d !important;
+    border: 1px solid #e5e5e5 !important;
+    box-shadow: none !important;
+    padding: 1.5rem !important;
+  }
+
+  /* Keep brand highlight accents elegant as high contrast print colors */
+  .text-orange-500,
+  .text-orange-400 {
+    color: #c2410c !important; /* Rich amber-brick-red-gold for print readability */
+  }
+
+  .text-white,
+  .text-neutral-100,
+  .text-neutral-200,
+  .text-neutral-300,
+  .text-neutral-400 {
+    color: #111827 !important;
+  }
+
+  .text-neutral-500,
+  .text-neutral-600 {
+    color: #4b5563 !important;
+  }
+
+  .border-neutral-800,
+  .border-neutral-900,
+  .border-neutral-805,
+  .border-neutral-850 {
+    border-color: #e5e7eb !important;
+  }
+
+  /* Table structure preservation on print forms */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    margin-top: 0.5rem !important;
+  }
+
+  th {
+    background-color: #f3f4f6 !important;
+    color: #111827 !important;
+    border: 1px solid #d1d5db !important;
+    font-weight: 700 !important;
+  }
+
+  td {
+    border: 1px solid #e5e7eb !important;
+    color: #1f2937 !important;
+  }
+
+  /* Prevent page cuts right inside sections or table rows */
+  section,
+  tr,
+  .card {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Custom cover letter paper block styles */
+  .min-h-\[640px\] {
+    min-height: auto !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+}
+
