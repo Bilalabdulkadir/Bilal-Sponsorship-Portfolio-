@@ -121,5 +121,10 @@
     border: none !important;
     padding: 0 !important;
   }
+
+  /* Reset simulated PDF zoom when printing */
+  #simulated-pdf-container {
+    zoom: 1 !important;
+  }
 }
 

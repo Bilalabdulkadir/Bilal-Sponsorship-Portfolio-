@@ -14,15 +14,18 @@ import {
   Printer, 
   ShieldAlert,
   Menu,
-  X
+  X,
+  GraduationCap
 } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import SponsorshipLetter from './components/SponsorshipLetter';
 import OfferExplorer from './components/OfferExplorer';
 import DocumentReader from './components/DocumentReader';
 import QRCodeGenerator from './components/QRCodeGenerator';
+import ContactForm from './components/ContactForm';
+import CentennialPortfolio from './components/CentennialPortfolio';
 
-type TabType = 'overview' | 'letter' | 'offers' | 'reader';
+type TabType = 'overview' | 'letter' | 'offers' | 'reader' | 'centennial';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
@@ -45,6 +48,7 @@ export default function App() {
     { id: 'letter' as TabType, label: 'Ministry Letter', icon: FileText },
     { id: 'offers' as TabType, label: 'Offer Explorer', icon: BookOpen },
     { id: 'reader' as TabType, label: 'Document Center', icon: FolderLock },
+    { id: 'centennial' as TabType, label: 'Centennial Canada', icon: GraduationCap },
   ];
 
   return (
@@ -259,11 +263,26 @@ export default function App() {
               <DocumentReader 
                 initialDocId={selectedDocId} 
                 onBack={() => setActiveTab('overview')} 
+                
               />
+            </motion.div>
+          )}
+          {activeTab === 'centennial' && (
+            <motion.div
+              key="centennial"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
+            >
+              <CentennialPortfolio />
             </motion.div>
           )}
         </AnimatePresence>
       </main>
+
+      {/* Interactive Verification Inquiry Form */}
+      <ContactForm />
 
       {/* Application Footer */}
       <footer className="bg-black text-neutral-400 py-12 px-4 mt-12 border-t border-neutral-900 no-print">

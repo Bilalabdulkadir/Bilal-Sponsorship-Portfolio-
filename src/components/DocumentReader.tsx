@@ -29,6 +29,7 @@ interface DocumentReaderProps {
 export default function DocumentReader({ initialDocId, onBack }: DocumentReaderProps) {
   const [selectedDocId, setSelectedDocId] = useState<string>(initialDocId || supportingDocuments[0].id);
   const [activePage, setActivePage] = useState<number>(1);
+  const [zoom, setZoom] = useState<number>(100);
 
   useEffect(() => {
     if (initialDocId) {
@@ -549,13 +550,36 @@ export default function DocumentReader({ initialDocId, onBack }: DocumentReaderP
         </div>
 
         {/* Page navigation controls */}
-        <div className="flex items-center gap-2 no-print">
+        <div className="flex flex-wrap items-center gap-2 no-print">
+          {/* Zoom controls */}
+          <div className="flex items-center gap-1 bg-neutral-900 border border-neutral-800 rounded-none p-1 text-xs">
+            <button
+              onClick={() => setZoom(z => Math.max(70, z - 10))}
+              disabled={zoom <= 70}
+              className="p-1 px-2 rounded-none text-neutral-400 hover:text-white hover:bg-neutral-850 disabled:opacity-35 disabled:hover:bg-transparent font-bold font-mono transition-colors flex items-center justify-center cursor-pointer"
+              title="Zoom Out"
+            >
+              <ZoomOut className="w-3.5 h-3.5" />
+            </button>
+            <span className="text-orange-500 font-mono font-bold px-2 text-[10px] min-w-[36px] text-center" title="Current Zoom Percentage">
+              {zoom}%
+            </span>
+            <button
+              onClick={() => setZoom(z => Math.min(150, z + 10))}
+              disabled={zoom >= 150}
+              className="p-1 px-2 rounded-none text-neutral-400 hover:text-white hover:bg-neutral-850 disabled:opacity-35 disabled:hover:bg-transparent font-bold font-mono transition-colors flex items-center justify-center cursor-pointer"
+              title="Zoom In"
+            >
+              <ZoomIn className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
           {activeDoc.pageCount > 1 && (
             <div className="flex items-center gap-1.5 bg-neutral-900 border border-neutral-800 rounded-none p-1 text-xs">
               <button
                 onClick={() => setActivePage(p => Math.max(1, p - 1))}
                 disabled={activePage === 1}
-                className="p-1 px-2.5 rounded-none text-neutral-400 hover:text-white hover:bg-neutral-800 disabled:opacity-30 disabled:hover:bg-transparent font-bold font-mono text-[10px] uppercase"
+                className="p-1 px-2.5 rounded-none text-neutral-400 hover:text-white hover:bg-neutral-800 disabled:opacity-30 disabled:hover:bg-transparent font-bold font-mono text-[10px] uppercase cursor-pointer"
               >
                 <ChevronLeft className="w-3.5 h-3.5 inline" /> Prev
               </button>
@@ -563,7 +587,7 @@ export default function DocumentReader({ initialDocId, onBack }: DocumentReaderP
               <button
                 onClick={() => setActivePage(p => Math.min(activeDoc.pageCount, p + 1))}
                 disabled={activePage === activeDoc.pageCount}
-                className="p-1 px-2.5 rounded-none text-neutral-400 hover:text-white hover:bg-neutral-800 disabled:opacity-30 disabled:hover:bg-transparent font-bold font-mono text-[10px] uppercase"
+                className="p-1 px-2.5 rounded-none text-neutral-400 hover:text-white hover:bg-neutral-800 disabled:opacity-30 disabled:hover:bg-transparent font-bold font-mono text-[10px] uppercase cursor-pointer"
               >
                 Next <ChevronRight className="w-3.5 h-3.5 inline" />
               </button>
@@ -572,7 +596,7 @@ export default function DocumentReader({ initialDocId, onBack }: DocumentReaderP
 
           <button 
             onClick={() => window.print()}
-            className="p-3 bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 text-neutral-300 hover:text-white rounded-none justify-center items-center flex gap-1.5 text-xs font-bold uppercase transition-colors font-mono"
+            className="p-3 bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 text-neutral-300 hover:text-white rounded-none justify-center items-center flex gap-1.5 text-xs font-bold uppercase transition-colors font-mono cursor-pointer"
           >
             <Printer className="w-4 h-4 text-orange-500" /> Print / Save PDF
           </button>
@@ -625,7 +649,7 @@ export default function DocumentReader({ initialDocId, onBack }: DocumentReaderP
             <span className="text-neutral-500 font-bold uppercase text-[9px] tracking-widest font-mono">Interactive Docket View</span>
           </div>
 
-          <div className="bg-neutral-900 border border-neutral-800 rounded-b-none text-neutral-100 flex-1 min-h-[500px]">
+          <div className="bg-neutral-900 border border-neutral-800 rounded-b-none text-neutral-100 flex-1 min-h-[500px] overflow-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${selectedDocId}-${activePage}`}
@@ -633,7 +657,9 @@ export default function DocumentReader({ initialDocId, onBack }: DocumentReaderP
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
-                className="h-full"
+                className="h-full origin-top-left"
+                id="simulated-pdf-container"
+                style={{ zoom: zoom / 100 }}
               >
                 {renderSimulatedPDFPage()}
               </motion.div>
